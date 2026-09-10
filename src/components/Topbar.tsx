@@ -1,10 +1,19 @@
 import { Menu, ShoppingBasket } from "lucide-react";
+import type { View } from "./Sidebar";
 
 interface TopbarProps {
   onMenuClick: () => void;
+  activeView: View;
 }
 
-export function Topbar({ onMenuClick }: TopbarProps) {
+const TITLES: Record<View, { title: string; subtitle: string }> = {
+  dashboard: { title: "Lista de Compras", subtitle: "O que está faltando em casa?" },
+  "diet-plans": { title: "Planos Alimentares", subtitle: "Cadastre refeições e gere a lista da semana" },
+};
+
+export function Topbar({ onMenuClick, activeView }: TopbarProps) {
+  const { title, subtitle } = TITLES[activeView];
+
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 sm:px-6">
       <div className="flex items-center gap-3">
@@ -17,12 +26,8 @@ export function Topbar({ onMenuClick }: TopbarProps) {
           <Menu size={20} />
         </button>
         <div>
-          <h1 className="text-base font-semibold text-slate-900 sm:text-lg">
-            Lista de Compras
-          </h1>
-          <p className="hidden text-xs text-slate-500 sm:block">
-            O que está faltando em casa?
-          </p>
+          <h1 className="text-base font-semibold text-slate-900 sm:text-lg">{title}</h1>
+          <p className="hidden text-xs text-slate-500 sm:block">{subtitle}</p>
         </div>
       </div>
 

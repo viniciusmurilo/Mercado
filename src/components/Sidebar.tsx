@@ -1,17 +1,20 @@
-import { ShoppingCart, LayoutDashboard, ListChecks, Settings } from "lucide-react";
+import { ShoppingCart, LayoutDashboard, ClipboardList } from "lucide-react";
+
+export type View = "dashboard" | "diet-plans";
 
 interface SidebarProps {
   open: boolean;
   onClose: () => void;
+  activeView: View;
+  onNavigate: (view: View) => void;
 }
 
-const NAV_ITEMS = [
-  { label: "Dashboard", icon: LayoutDashboard, active: true },
-  { label: "Lista de Compras", icon: ListChecks, active: false },
-  { label: "Configurações", icon: Settings, active: false },
+const NAV_ITEMS: { id: View; label: string; icon: typeof LayoutDashboard }[] = [
+  { id: "dashboard", label: "Lista de Compras", icon: LayoutDashboard },
+  { id: "diet-plans", label: "Planos Alimentares", icon: ClipboardList },
 ];
 
-export function Sidebar({ open, onClose }: SidebarProps) {
+export function Sidebar({ open, onClose, activeView, onNavigate }: SidebarProps) {
   return (
     <>
       {open && (
@@ -34,19 +37,23 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         </div>
 
         <nav className="flex-1 space-y-1 px-3 py-4">
-          {NAV_ITEMS.map(({ label, icon: Icon, active }) => (
-            <a
-              key={label}
-              href="#"
-              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                active
+          {NAV_ITEMS.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => {
+                onNavigate(id);
+                onClose();
+              }}
+              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                activeView === id
                   ? "bg-emerald-500/10 text-emerald-400"
                   : "text-slate-400 hover:bg-slate-800 hover:text-slate-100"
               }`}
             >
               <Icon size={18} />
               {label}
-            </a>
+            </button>
           ))}
         </nav>
 
