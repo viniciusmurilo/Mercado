@@ -1,18 +1,11 @@
 import { useEffect, useState } from "react";
-import type { MealId, MealItem, Menu, Patient } from "../types";
+import type { MealId, MealItem, MealItemInput, Menu, Patient, ShoppingItemInput } from "../types";
 import { MEALS } from "../data/meals";
 import { PatientTabs } from "../components/PatientTabs";
 import { MenuTabs } from "../components/MenuTabs";
 import { MealSection } from "../components/MealSection";
 import { MenuSummary } from "../components/MenuSummary";
 import { WeeklyListGenerator } from "../components/WeeklyListGenerator";
-
-interface MealItemInput {
-  name: string;
-  quantity: number;
-  unit: string;
-  category: string;
-}
 
 interface DietPlansPageProps {
   patients: Patient[];
@@ -22,10 +15,11 @@ interface DietPlansPageProps {
   onRemovePatient: (id: string) => void;
   onAddMenu: (patientId: string) => void;
   onRemoveMenu: (id: string) => void;
+  onRenameMenu: (id: string, name: string) => void;
   onAddMealItem: (menuId: string, meal: MealId, input: MealItemInput) => void;
   onRemoveMealItem: (id: string) => void;
   onChangeMealItemQuantity: (id: string, quantity: number) => void;
-  onGenerateList: (items: MealItemInput[]) => void;
+  onGenerateList: (items: ShoppingItemInput[]) => void;
 }
 
 export function DietPlansPage({
@@ -36,6 +30,7 @@ export function DietPlansPage({
   onRemovePatient,
   onAddMenu,
   onRemoveMenu,
+  onRenameMenu,
   onAddMealItem,
   onRemoveMealItem,
   onChangeMealItemQuantity,
@@ -88,6 +83,7 @@ export function DietPlansPage({
                 onSelect={setActiveMenuId}
                 onAdd={() => onAddMenu(activePatient.id)}
                 onRemove={onRemoveMenu}
+                onRename={onRenameMenu}
               />
             </div>
 

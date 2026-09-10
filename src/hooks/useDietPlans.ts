@@ -2,14 +2,7 @@ import { useLocalStorage } from "./useLocalStorage";
 import { createId } from "../utils/id";
 import { DEFAULT_PATIENTS } from "../data/patients";
 import { MAX_MENUS_PER_PATIENT } from "../data/meals";
-import type { MealId, MealItem, Menu, Patient } from "../types";
-
-export interface MealItemInput {
-  name: string;
-  quantity: number;
-  unit: string;
-  category: string;
-}
+import type { MealId, MealItem, MealItemInput, Menu, Patient } from "../types";
 
 const DEFAULT_MENUS: Menu[] = DEFAULT_PATIENTS.map((p) => ({
   id: `${p.id}-menu-1`,
@@ -48,6 +41,12 @@ export function useDietPlans() {
     setMealItems((prev) => prev.filter((mi) => mi.menuId !== menuId));
   }
 
+  function renameMenu(menuId: string, name: string) {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    setMenus((prev) => prev.map((m) => (m.id === menuId ? { ...m, name: trimmed } : m)));
+  }
+
   function addMealItem(menuId: string, meal: MealId, input: MealItemInput) {
     setMealItems((prev) => [...prev, { id: createId(), menuId, meal, ...input }]);
   }
@@ -69,6 +68,7 @@ export function useDietPlans() {
     removePatient,
     addMenu,
     removeMenu,
+    renameMenu,
     addMealItem,
     removeMealItem,
     changeMealItemQuantity,

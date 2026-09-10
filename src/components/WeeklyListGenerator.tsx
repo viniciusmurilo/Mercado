@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ShoppingCart } from "lucide-react";
-import type { MealItem, Menu, Patient } from "../types";
+import type { MealItem, Menu, Patient, ShoppingItemInput } from "../types";
 import { aggregateMenuItems, PERIOD_LABEL, type Period } from "../utils/aggregateDiet";
 import { CategoryBadge } from "./CategoryBadge";
 
@@ -8,7 +8,7 @@ interface WeeklyListGeneratorProps {
   patients: Patient[];
   menus: Menu[];
   mealItems: MealItem[];
-  onGenerate: (items: { name: string; quantity: number; unit: string; category: string }[]) => void;
+  onGenerate: (items: ShoppingItemInput[]) => void;
 }
 
 export function WeeklyListGenerator({ patients, menus, mealItems, onGenerate }: WeeklyListGeneratorProps) {
@@ -65,6 +65,11 @@ export function WeeklyListGenerator({ patients, menus, mealItems, onGenerate }: 
           ))}
         </div>
       </div>
+
+      <p className="mb-4 text-xs text-slate-500">
+        Alimentos marcados como "Pronto" nas refeições já entram aqui convertidos para peso cru (de compra),
+        usando o fator de cocção cadastrado em cada item.
+      </p>
 
       <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {patients.map((patient) => {

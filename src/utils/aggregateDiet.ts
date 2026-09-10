@@ -43,8 +43,10 @@ function round2(n: number) {
 
 /**
  * Sums ingredients across the 4 daily meals of each patient's selected menu,
- * then projects the total for the given period (week/month), converting
- * compatible units (g<->kg, ml<->L) so quantities from different meals add up.
+ * then projects the total for the given period (week/month). Items marked
+ * "pronto" are converted to purchase (raw) weight via their cooking factor
+ * before summing, and compatible units (g<->kg, ml<->L) are combined so
+ * quantities from different meals add up correctly.
  */
 export function aggregateMenuItems(
   mealItems: MealItem[],
@@ -76,12 +78,14 @@ export function aggregateMenuItems(
       const normName = item.name.trim().toLowerCase();
       const family = unitFamily(item.unit);
       const groupKey = family === "count" ? `${normName}|${item.unit}` : `${normName}|${family}`;
+      const factor = item.factor && item.factor > 0 ? item.factor : 1;
+      const purchaseQuantity = item.preparation === "pronto" ? item.quantity / factor : item.quantity;
       const baseQty =
         family === "mass"
-          ? item.quantity * MASS_TO_G[item.unit]
+          ? purchaseQuantity * MASS_TO_G[item.unit]
           : family === "volume"
-            ? item.quantity * VOLUME_TO_ML[item.unit]
-            : item.quantity;
+            ? purchaseQuantity * VOLUME_TO_ML[item.unit]
+            : purchaseQuantity;
 
       let group = groups.get(groupKey);
       if (!group) {

@@ -43,10 +43,22 @@ function MealItemRow({
     }
   }
 
+  const factor = item.factor && item.factor > 0 ? item.factor : 1;
+  const purchaseQuantity = Math.round((item.quantity / factor) * 100) / 100;
+
   return (
-    <li className="flex items-center gap-2 py-2 text-sm">
+    <li className="flex flex-wrap items-center gap-2 py-2 text-sm">
       <span className="min-w-0 flex-1 truncate text-slate-800">{item.name}</span>
       <CategoryBadge categoryId={item.category} />
+      {item.preparation === "pronto" && (
+        <span
+          className="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-medium text-amber-700"
+          title={`${item.quantity}${item.unit} pronto ÷ ${factor} ≈ ${purchaseQuantity}${item.unit} cru para comprar`}
+        >
+          Pronto → {purchaseQuantity}
+          {item.unit} cru
+        </span>
+      )}
       <input
         type="text"
         inputMode="decimal"

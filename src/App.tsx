@@ -6,14 +6,7 @@ import { DietPlansPage } from "./pages/DietPlansPage";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useDietPlans } from "./hooks/useDietPlans";
 import { createId } from "./utils/id";
-import type { ShoppingItem } from "./types";
-
-interface ItemInput {
-  name: string;
-  quantity: number;
-  unit: string;
-  category: string;
-}
+import type { ShoppingItem, ShoppingItemInput } from "./types";
 
 export default function App() {
   const [items, setItems] = useLocalStorage<ShoppingItem[]>("mercado.items", []);
@@ -22,11 +15,11 @@ export default function App() {
 
   const dietPlans = useDietPlans();
 
-  function handleAdd(input: ItemInput) {
+  function handleAdd(input: ShoppingItemInput) {
     setItems((prev) => [...prev, { id: createId(), checked: false, createdAt: Date.now(), ...input }]);
   }
 
-  function handleQuickAdd(input: ItemInput) {
+  function handleQuickAdd(input: ShoppingItemInput) {
     setItems((prev) => {
       const existing = prev.find(
         (item) =>
@@ -43,7 +36,7 @@ export default function App() {
     });
   }
 
-  function handleGenerateList(inputs: ItemInput[]) {
+  function handleGenerateList(inputs: ShoppingItemInput[]) {
     setItems((prev) => {
       let next = [...prev];
       for (const input of inputs) {
@@ -118,6 +111,7 @@ export default function App() {
               onRemovePatient={dietPlans.removePatient}
               onAddMenu={dietPlans.addMenu}
               onRemoveMenu={dietPlans.removeMenu}
+              onRenameMenu={dietPlans.renameMenu}
               onAddMealItem={dietPlans.addMealItem}
               onRemoveMealItem={dietPlans.removeMealItem}
               onChangeMealItemQuantity={dietPlans.changeMealItemQuantity}

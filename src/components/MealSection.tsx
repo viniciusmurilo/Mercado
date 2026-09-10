@@ -1,12 +1,12 @@
 import type { MealDef } from "../data/meals";
-import type { MealItem } from "../types";
+import type { MealItem, MealItemInput } from "../types";
 import { MealItemForm } from "./MealItemForm";
 import { MealItemsList } from "./MealItemsList";
 
 interface MealSectionProps {
   meal: MealDef;
   items: MealItem[];
-  onAdd: (input: { name: string; quantity: number; unit: string; category: string }) => void;
+  onAdd: (input: MealItemInput) => void;
   onRemove: (id: string) => void;
   onChangeQuantity: (id: string, quantity: number) => void;
 }

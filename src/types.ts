@@ -21,6 +21,8 @@ export interface Menu {
   name: string;
 }
 
+export type Preparation = "cru" | "pronto";
+
 export interface MealItem {
   id: string;
   menuId: string;
@@ -29,4 +31,12 @@ export interface MealItem {
   quantity: number;
   unit: string;
   category: string;
+  /** Se a quantidade registrada é como comprado (cru) ou como consumido (pronto). */
+  preparation: Preparation;
+  /** Fator de cocção (peso pronto / peso cru) usado para converter para peso de compra quando preparation === "pronto". */
+  factor: number;
 }
+
+export type MealItemInput = Omit<MealItem, "id" | "menuId" | "meal">;
+
+export type ShoppingItemInput = Omit<ShoppingItem, "id" | "checked" | "createdAt">;

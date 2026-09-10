@@ -2,9 +2,11 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { Plus } from "lucide-react";
 import { CATEGORIES, UNITS } from "../data/categories";
+import { suggestCookingFactor } from "../data/cookingFactors";
+import type { MealItemInput, Preparation } from "../types";
 
 interface MealItemFormProps {
-  onAdd: (input: { name: string; quantity: number; unit: string; category: string }) => void;
+  onAdd: (input: MealItemInput) => void;
 }
 
 export function MealItemForm({ onAdd }: MealItemFormProps) {
@@ -12,12 +14,45 @@ export function MealItemForm({ onAdd }: MealItemFormProps) {
   const [quantity, setQuantity] = useState("100");
   const [unit, setUnit] = useState("g");
   const [category, setCategory] = useState(CATEGORIES[0].id);
+  const [preparation, setPreparation] = useState<Preparation>("cru");
+  const [factor, setFactor] = useState("1");
+  const [factorTouched, setFactorTouched] = useState(false);
   const [error, setError] = useState("");
+
+  function handleNameChange(value: string) {
+    setName(value);
+    if (preparation === "pronto" && !factorTouched) {
+      const suggestion = suggestCookingFactor(value);
+      if (suggestion) setFactor(String(suggestion));
+    }
+  }
+
+  function handlePreparationChange(value: Preparation) {
+    setPreparation(value);
+    if (value === "pronto" && !factorTouched) {
+      const suggestion = suggestCookingFactor(name);
+      setFactor(suggestion ? String(suggestion) : "1");
+    }
+  }
+
+  function handleFactorChange(value: string) {
+    setFactor(value);
+    setFactorTouched(true);
+  }
+
+  const parsedQuantity = Number(quantity.replace(",", "."));
+  const parsedFactor = Number(factor.replace(",", "."));
+  const showPurchaseHint =
+    preparation === "pronto" &&
+    Number.isFinite(parsedQuantity) &&
+    parsedQuantity > 0 &&
+    Number.isFinite(parsedFactor) &&
+    parsedFactor > 0;
+  const purchaseHintValue = showPurchaseHint ? Math.round((parsedQuantity / parsedFactor) * 100) / 100 : 0;
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const trimmedName = name.trim();
-    const parsedQuantity = Number(quantity.replace(",", "."));
 
     if (!trimmedName) {
       setError("Informe o alimento.");
@@ -27,8 +62,19 @@ export function MealItemForm({ onAdd }: MealItemFormProps) {
       setError("Quantidade inválida.");
       return;
     }
+    if (preparation === "pronto" && (!Number.isFinite(parsedFactor) || parsedFactor <= 0)) {
+      setError("Fator de cocção inválido.");
+      return;
+    }
 
-    onAdd({ name: trimmedName, quantity: parsedQuantity, unit, category });
+    onAdd({
+      name: trimmedName,
+      quantity: parsedQuantity,
+      unit,
+      category,
+      preparation,
+      factor: preparation === "pronto" ? parsedFactor : 1,
+    });
     setName("");
     setQuantity("100");
     setError("");
@@ -40,7 +86,7 @@ export function MealItemForm({ onAdd }: MealItemFormProps) {
         <label className="mb-1 block text-[11px] font-medium text-slate-500">Alimento</label>
         <input
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => handleNameChange(e.target.value)}
           placeholder="Ex: Peito de frango"
           className="w-full rounded-md border border-slate-300 px-2.5 py-1.5 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
         />
@@ -82,12 +128,55 @@ export function MealItemForm({ onAdd }: MealItemFormProps) {
           ))}
         </select>
       </div>
+
+      <div>
+        <label className="mb-1 block text-[11px] font-medium text-slate-500">Como registrado</label>
+        <div className="flex rounded-md bg-white p-0.5 text-xs ring-1 ring-slate-300">
+          <button
+            type="button"
+            onClick={() => handlePreparationChange("cru")}
+            className={`rounded px-2 py-1 font-medium transition-colors ${
+              preparation === "cru" ? "bg-emerald-500 text-white" : "text-slate-500"
+            }`}
+          >
+            Cru
+          </button>
+          <button
+            type="button"
+            onClick={() => handlePreparationChange("pronto")}
+            className={`rounded px-2 py-1 font-medium transition-colors ${
+              preparation === "pronto" ? "bg-emerald-500 text-white" : "text-slate-500"
+            }`}
+          >
+            Pronto
+          </button>
+        </div>
+      </div>
+
+      {preparation === "pronto" && (
+        <div className="w-24">
+          <label className="mb-1 block text-[11px] font-medium text-slate-500">Fator cocção</label>
+          <input
+            value={factor}
+            onChange={(e) => handleFactorChange(e.target.value)}
+            inputMode="decimal"
+            className="w-full rounded-md border border-slate-300 px-2.5 py-1.5 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+          />
+        </div>
+      )}
+
       <button
         type="submit"
         className="flex items-center gap-1 rounded-md bg-emerald-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-600"
       >
         <Plus size={14} /> Adicionar
       </button>
+
+      {showPurchaseHint && (
+        <p className="w-full text-[11px] text-slate-500">
+          ≈ {purchaseHintValue} {unit} de {name || "alimento"} cru para comprar
+        </p>
+      )}
       {error && <p className="w-full text-xs text-red-600">{error}</p>}
     </form>
   );
