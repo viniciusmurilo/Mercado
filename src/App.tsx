@@ -4,6 +4,7 @@ import { Sidebar } from "./components/Sidebar";
 import { Topbar } from "./components/Topbar";
 import { StatCard } from "./components/StatCard";
 import { AddItemForm } from "./components/AddItemForm";
+import { QuickAddPanel } from "./components/QuickAddPanel";
 import { ShoppingListTable } from "./components/ShoppingListTable";
 import { ExportActions } from "./components/ExportActions";
 import { useLocalStorage } from "./hooks/useLocalStorage";
@@ -32,6 +33,23 @@ export default function App() {
       ...prev,
       { id: createId(), checked: false, createdAt: Date.now(), ...input },
     ]);
+  }
+
+  function handleQuickAdd(input: { name: string; quantity: number; unit: string; category: string }) {
+    setItems((prev) => {
+      const existing = prev.find(
+        (item) =>
+          !item.checked &&
+          item.category === input.category &&
+          item.name.trim().toLowerCase() === input.name.trim().toLowerCase(),
+      );
+      if (existing) {
+        return prev.map((item) =>
+          item.id === existing.id ? { ...item, quantity: item.quantity + input.quantity } : item,
+        );
+      }
+      return [...prev, { id: createId(), checked: false, createdAt: Date.now(), ...input }];
+    });
   }
 
   function handleToggle(id: string) {
@@ -77,6 +95,8 @@ export default function App() {
             <StatCard label="No carrinho" value={stats.checked.length} icon={CheckCircle2} accent="#16a34a" />
             <StatCard label="Progresso" value={`${stats.progress}%`} icon={Percent} accent="#7c3aed" />
           </div>
+
+          <QuickAddPanel items={sortedItems} onQuickAdd={handleQuickAdd} />
 
           <AddItemForm onAdd={handleAdd} />
 

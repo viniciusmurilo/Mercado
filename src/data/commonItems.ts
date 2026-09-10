@@ -1,0 +1,131 @@
+export interface CommonItem {
+  name: string;
+  unit: string;
+  category: string;
+}
+
+export const COMMON_ITEMS: CommonItem[] = [
+  // Hortifruti — frutas
+  { name: "Banana", unit: "kg", category: "hortifruti" },
+  { name: "Maçã", unit: "kg", category: "hortifruti" },
+  { name: "Laranja", unit: "kg", category: "hortifruti" },
+  { name: "Mamão", unit: "un", category: "hortifruti" },
+  { name: "Melancia", unit: "un", category: "hortifruti" },
+  { name: "Uva", unit: "kg", category: "hortifruti" },
+  { name: "Limão", unit: "kg", category: "hortifruti" },
+  { name: "Abacaxi", unit: "un", category: "hortifruti" },
+  { name: "Manga", unit: "kg", category: "hortifruti" },
+  { name: "Morango", unit: "cx", category: "hortifruti" },
+  { name: "Pera", unit: "kg", category: "hortifruti" },
+  { name: "Abacate", unit: "un", category: "hortifruti" },
+
+  // Hortifruti — verduras e legumes
+  { name: "Alface", unit: "un", category: "hortifruti" },
+  { name: "Tomate", unit: "kg", category: "hortifruti" },
+  { name: "Cebola", unit: "kg", category: "hortifruti" },
+  { name: "Alho", unit: "un", category: "hortifruti" },
+  { name: "Batata", unit: "kg", category: "hortifruti" },
+  { name: "Batata-doce", unit: "kg", category: "hortifruti" },
+  { name: "Cenoura", unit: "kg", category: "hortifruti" },
+  { name: "Pimentão", unit: "kg", category: "hortifruti" },
+  { name: "Repolho", unit: "un", category: "hortifruti" },
+  { name: "Abobrinha", unit: "kg", category: "hortifruti" },
+  { name: "Chuchu", unit: "kg", category: "hortifruti" },
+  { name: "Couve", unit: "un", category: "hortifruti" },
+  { name: "Brócolis", unit: "un", category: "hortifruti" },
+  { name: "Pepino", unit: "kg", category: "hortifruti" },
+  { name: "Beterraba", unit: "kg", category: "hortifruti" },
+  { name: "Mandioca", unit: "kg", category: "hortifruti" },
+  { name: "Milho verde", unit: "un", category: "hortifruti" },
+  { name: "Coentro/Cheiro-verde", unit: "un", category: "hortifruti" },
+
+  // Açougue
+  { name: "Carne moída", unit: "kg", category: "acougue" },
+  { name: "Peito de frango", unit: "kg", category: "acougue" },
+  { name: "Coxa/Sobrecoxa de frango", unit: "kg", category: "acougue" },
+  { name: "Picanha", unit: "kg", category: "acougue" },
+  { name: "Linguiça", unit: "kg", category: "acougue" },
+  { name: "Bacon", unit: "pct", category: "acougue" },
+  { name: "Bisteca suína", unit: "kg", category: "acougue" },
+  { name: "Carne para churrasco", unit: "kg", category: "acougue" },
+  { name: "Filé de peixe", unit: "kg", category: "acougue" },
+  { name: "Costela", unit: "kg", category: "acougue" },
+
+  // Padaria
+  { name: "Pão francês", unit: "kg", category: "padaria" },
+  { name: "Pão de forma", unit: "un", category: "padaria" },
+  { name: "Pão de queijo", unit: "pct", category: "padaria" },
+  { name: "Bolo", unit: "un", category: "padaria" },
+  { name: "Biscoito/Bolacha", unit: "pct", category: "padaria" },
+  { name: "Torrada", unit: "pct", category: "padaria" },
+
+  // Laticínios/Frios
+  { name: "Leite", unit: "L", category: "laticinios" },
+  { name: "Queijo mussarela", unit: "kg", category: "laticinios" },
+  { name: "Queijo prato", unit: "kg", category: "laticinios" },
+  { name: "Requeijão", unit: "un", category: "laticinios" },
+  { name: "Manteiga", unit: "un", category: "laticinios" },
+  { name: "Margarina", unit: "un", category: "laticinios" },
+  { name: "Iogurte", unit: "un", category: "laticinios" },
+  { name: "Presunto", unit: "kg", category: "laticinios" },
+  { name: "Ovos", unit: "dz", category: "laticinios" },
+  { name: "Creme de leite", unit: "un", category: "laticinios" },
+  { name: "Leite condensado", unit: "un", category: "laticinios" },
+
+  // Mercearia
+  { name: "Arroz", unit: "kg", category: "mercearia" },
+  { name: "Feijão", unit: "kg", category: "mercearia" },
+  { name: "Macarrão", unit: "pct", category: "mercearia" },
+  { name: "Molho de tomate", unit: "un", category: "mercearia" },
+  { name: "Extrato de tomate", unit: "un", category: "mercearia" },
+  { name: "Açúcar", unit: "kg", category: "mercearia" },
+  { name: "Sal", unit: "kg", category: "mercearia" },
+  { name: "Óleo de soja", unit: "un", category: "mercearia" },
+  { name: "Azeite", unit: "un", category: "mercearia" },
+  { name: "Farinha de trigo", unit: "kg", category: "mercearia" },
+  { name: "Farinha de mandioca", unit: "kg", category: "mercearia" },
+  { name: "Café", unit: "pct", category: "mercearia" },
+  { name: "Achocolatado", unit: "un", category: "mercearia" },
+  { name: "Vinagre", unit: "un", category: "mercearia" },
+  { name: "Fermento em pó", unit: "un", category: "mercearia" },
+  { name: "Lentilha", unit: "pct", category: "mercearia" },
+  { name: "Grão-de-bico", unit: "pct", category: "mercearia" },
+  { name: "Aveia", unit: "pct", category: "mercearia" },
+  { name: "Granola", unit: "pct", category: "mercearia" },
+  { name: "Maionese", unit: "un", category: "mercearia" },
+  { name: "Ketchup", unit: "un", category: "mercearia" },
+  { name: "Mostarda", unit: "un", category: "mercearia" },
+  { name: "Tempero pronto", unit: "un", category: "mercearia" },
+  { name: "Caldo de galinha", unit: "cx", category: "mercearia" },
+
+  // Bebidas
+  { name: "Água mineral", unit: "cx", category: "bebidas" },
+  { name: "Refrigerante", unit: "L", category: "bebidas" },
+  { name: "Suco", unit: "L", category: "bebidas" },
+  { name: "Cerveja", unit: "cx", category: "bebidas" },
+  { name: "Vinho", unit: "un", category: "bebidas" },
+  { name: "Água de coco", unit: "un", category: "bebidas" },
+
+  // Limpeza
+  { name: "Detergente", unit: "un", category: "limpeza" },
+  { name: "Sabão em pó", unit: "pct", category: "limpeza" },
+  { name: "Amaciante", unit: "un", category: "limpeza" },
+  { name: "Desinfetante", unit: "un", category: "limpeza" },
+  { name: "Água sanitária", unit: "un", category: "limpeza" },
+  { name: "Esponja de aço", unit: "pct", category: "limpeza" },
+  { name: "Papel toalha", unit: "un", category: "limpeza" },
+  { name: "Papel higiênico", unit: "pct", category: "limpeza" },
+  { name: "Saco de lixo", unit: "pct", category: "limpeza" },
+  { name: "Álcool", unit: "un", category: "limpeza" },
+
+  // Higiene/Farmácia
+  { name: "Sabonete", unit: "un", category: "higiene" },
+  { name: "Shampoo", unit: "un", category: "higiene" },
+  { name: "Condicionador", unit: "un", category: "higiene" },
+  { name: "Creme dental", unit: "un", category: "higiene" },
+  { name: "Escova de dente", unit: "un", category: "higiene" },
+  { name: "Desodorante", unit: "un", category: "higiene" },
+  { name: "Fio dental", unit: "un", category: "higiene" },
+  { name: "Absorvente", unit: "pct", category: "higiene" },
+  { name: "Algodão", unit: "pct", category: "higiene" },
+];
