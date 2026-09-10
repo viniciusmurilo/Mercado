@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { ShoppingCart } from "lucide-react";
+import { Shuffle, ShoppingCart } from "lucide-react";
 import type { MealItem, Menu, Patient, ShoppingItemInput } from "../types";
-import { aggregateMenuItems, PERIOD_LABEL, type Period } from "../utils/aggregateDiet";
+import { aggregateDayPlans, PERIOD_LABEL, PERIOD_MULTIPLIER, type Period } from "../utils/aggregateDiet";
+import { buildDayPlan } from "../utils/weekPlan";
+import { DAY_LABELS } from "../data/meals";
 import { CategoryBadge } from "./CategoryBadge";
 
 interface WeeklyListGeneratorProps {
@@ -11,36 +13,66 @@ interface WeeklyListGeneratorProps {
   onGenerate: (items: ShoppingItemInput[]) => void;
 }
 
+/** patientId -> { menuId: peso/frequência } — apenas os cardápios selecionados aparecem no mapa. */
+type Selection = Record<string, Record<string, number>>;
+
 export function WeeklyListGenerator({ patients, menus, mealItems, onGenerate }: WeeklyListGeneratorProps) {
   const [period, setPeriod] = useState<Period>("semana");
-  const [selection, setSelection] = useState<Record<string, string>>({});
+  const [selection, setSelection] = useState<Selection>({});
+  const [rerollSeed, setRerollSeed] = useState(0);
 
   useEffect(() => {
     setSelection((prev) => {
-      const next = { ...prev };
-      let changed = false;
+      const next: Selection = {};
       for (const patient of patients) {
-        const patientMenus = menus.filter((m) => m.patientId === patient.id);
-        const stillValid = patientMenus.some((m) => m.id === next[patient.id]);
-        if (!stillValid) {
-          next[patient.id] = patientMenus[0]?.id ?? "";
-          changed = true;
+        const patientMenuIds = menus.filter((m) => m.patientId === patient.id).map((m) => m.id);
+        const prevSel = prev[patient.id];
+        const cleaned: Record<string, number> = {};
+        if (prevSel) {
+          for (const menuId of patientMenuIds) {
+            if (prevSel[menuId] !== undefined) cleaned[menuId] = prevSel[menuId];
+          }
         }
+        next[patient.id] =
+          Object.keys(cleaned).length > 0 ? cleaned : patientMenuIds[0] ? { [patientMenuIds[0]]: 1 } : {};
       }
-      for (const key of Object.keys(next)) {
-        if (!patients.some((p) => p.id === key)) {
-          delete next[key];
-          changed = true;
-        }
-      }
-      return changed ? next : prev;
+      return next;
     });
   }, [patients, menus]);
 
-  const aggregated = useMemo(
-    () => aggregateMenuItems(mealItems, patients, selection, period),
-    [mealItems, patients, selection, period],
-  );
+  function toggleMenu(patientId: string, menuId: string) {
+    setSelection((prev) => {
+      const patientSel = { ...(prev[patientId] ?? {}) };
+      if (menuId in patientSel) delete patientSel[menuId];
+      else patientSel[menuId] = 1;
+      return { ...prev, [patientId]: patientSel };
+    });
+  }
+
+  function setWeight(patientId: string, menuId: string, weight: number) {
+    setSelection((prev) => ({
+      ...prev,
+      [patientId]: { ...(prev[patientId] ?? {}), [menuId]: weight },
+    }));
+  }
+
+  const dayPlans = useMemo(() => {
+    const days = PERIOD_MULTIPLIER[period];
+    const result: Record<string, string[]> = {};
+    for (const patient of patients) {
+      const patientSel = selection[patient.id] ?? {};
+      const menuIds = Object.keys(patientSel);
+      if (menuIds.length === 0) continue;
+      result[patient.id] = buildDayPlan(menuIds, patientSel, days);
+    }
+    return result;
+    // rerollSeed é usado só para forçar um novo sorteio sob demanda
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selection, period, patients, rerollSeed]);
+
+  const aggregated = useMemo(() => aggregateDayPlans(mealItems, patients, dayPlans), [mealItems, patients, dayPlans]);
+
+  const hasAnySelection = Object.values(dayPlans).some((plan) => plan.length > 0);
 
   function handleGenerate() {
     onGenerate(aggregated.map((item) => ({ name: item.name, quantity: item.quantity, unit: item.unit, category: item.category })));
@@ -67,32 +99,86 @@ export function WeeklyListGenerator({ patients, menus, mealItems, onGenerate }: 
       </div>
 
       <p className="mb-4 text-xs text-slate-500">
-        Alimentos marcados como "Pronto" nas refeições já entram aqui convertidos para peso cru (de compra),
-        usando o fator de cocção cadastrado em cada item.
+        Selecione um ou mais cardápios por paciente — o app sorteia qual usar em cada dia (sem repetir dias
+        seguidos), respeitando o peso de cada um. Itens marcados como "Pronto" já entram convertidos para peso
+        cru (de compra).
       </p>
 
       <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {patients.map((patient) => {
           const patientMenus = menus.filter((m) => m.patientId === patient.id);
+          const patientSel = selection[patient.id] ?? {};
           return (
-            <div key={patient.id}>
-              <label className="mb-1 block text-xs font-medium text-slate-600">Cardápio de {patient.name}</label>
-              <select
-                value={selection[patient.id] ?? ""}
-                onChange={(e) => setSelection((prev) => ({ ...prev, [patient.id]: e.target.value }))}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
-              >
-                <option value="">Não incluir</option>
-                {patientMenus.map((menu) => (
-                  <option key={menu.id} value={menu.id}>
-                    {menu.name}
-                  </option>
-                ))}
-              </select>
+            <div key={patient.id} className="rounded-lg border border-slate-200 p-3">
+              <p className="mb-2 text-xs font-medium text-slate-600">Cardápios de {patient.name}</p>
+              {patientMenus.length === 0 ? (
+                <p className="text-xs text-slate-400">Nenhum cardápio cadastrado.</p>
+              ) : (
+                <div className="space-y-1.5">
+                  {patientMenus.map((menu) => {
+                    const selected = menu.id in patientSel;
+                    return (
+                      <div key={menu.id} className="flex items-center gap-2">
+                        <label className="flex flex-1 items-center gap-2 text-sm text-slate-700">
+                          <input
+                            type="checkbox"
+                            checked={selected}
+                            onChange={() => toggleMenu(patient.id, menu.id)}
+                            className="h-4 w-4 rounded border-slate-300 text-emerald-500 focus:ring-emerald-500"
+                          />
+                          {menu.name}
+                        </label>
+                        {selected && (
+                          <div className="flex items-center gap-1">
+                            <span className="text-[11px] text-slate-400">peso</span>
+                            <input
+                              type="number"
+                              min="1"
+                              value={patientSel[menu.id]}
+                              onChange={(e) => setWeight(patient.id, menu.id, Math.max(1, Number(e.target.value) || 1))}
+                              className="w-12 rounded-md border border-slate-300 px-1.5 py-1 text-xs text-right outline-none focus:border-emerald-500"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           );
         })}
       </div>
+
+      {hasAnySelection && (
+        <div className="mb-4 space-y-2 rounded-lg bg-slate-50 p-3">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-medium text-slate-600">
+              {period === "semana" ? "Escala da semana (sorteada)" : "Distribuição sorteada para o mês"}
+            </p>
+            <button
+              type="button"
+              onClick={() => setRerollSeed((s) => s + 1)}
+              className="flex items-center gap-1 text-xs font-medium text-emerald-600 hover:text-emerald-700"
+            >
+              <Shuffle size={12} /> Sortear novamente
+            </button>
+          </div>
+          {period === "semana" &&
+            patients.map((patient) => {
+              const plan = dayPlans[patient.id];
+              if (!plan || plan.length === 0) return null;
+              return (
+                <p key={patient.id} className="text-xs text-slate-600">
+                  <span className="font-medium">{patient.name}:</span>{" "}
+                  {plan
+                    .map((menuId, i) => `${DAY_LABELS[i] ?? `D${i + 1}`} ${menus.find((m) => m.id === menuId)?.name ?? "?"}`)
+                    .join(" · ")}
+                </p>
+              );
+            })}
+        </div>
+      )}
 
       {aggregated.length === 0 ? (
         <p className="rounded-lg bg-slate-50 p-4 text-center text-sm text-slate-500">

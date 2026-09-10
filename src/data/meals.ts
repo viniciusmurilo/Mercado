@@ -16,4 +16,6 @@ export function mealLabel(id: MealId): string {
   return MEALS.find((m) => m.id === id)?.label ?? id;
 }
 
-export const MAX_MENUS_PER_PATIENT = 3;
+export const MAX_MENUS_PER_PATIENT = 10;
+
+export const DAY_LABELS = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
