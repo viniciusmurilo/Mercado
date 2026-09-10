@@ -69,6 +69,22 @@ export function useDietPlans() {
     setMealItems((prev) => prev.filter((mi) => mi.menuId !== menuId));
   }
 
+  /** Duplica um cardápio inteiro (todas as refeições/alimentos) para o mesmo paciente. */
+  function duplicateMenu(menuId: string): string | undefined {
+    const source = menus.find((m) => m.id === menuId);
+    if (!source) return undefined;
+    const siblingCount = menus.filter((m) => m.patientId === source.patientId).length;
+    if (siblingCount >= MAX_MENUS_PER_PATIENT) return undefined;
+
+    const newMenuId = createId();
+    setMenus((prev) => [...prev, { id: newMenuId, patientId: source.patientId, name: `${source.name} (cópia)` }]);
+    setMealItems((prev) => [
+      ...prev,
+      ...prev.filter((mi) => mi.menuId === menuId).map((mi) => ({ ...mi, id: createId(), menuId: newMenuId })),
+    ]);
+    return newMenuId;
+  }
+
   function renameMenu(menuId: string, name: string) {
     const trimmed = name.trim();
     if (!trimmed) return;
@@ -104,6 +120,7 @@ export function useDietPlans() {
     addMenu,
     removeMenu,
     renameMenu,
+    duplicateMenu,
     addMealItem,
     removeMealItem,
     changeMealItemQuantity,

@@ -17,6 +17,7 @@ interface DietPlansPageProps {
   onAddMenu: (patientId: string) => void;
   onRemoveMenu: (id: string) => void;
   onRenameMenu: (id: string, name: string) => void;
+  onDuplicateMenu: (id: string) => string | undefined;
   onAddMealItem: (menuId: string, meal: MealId, input: MealItemInput) => void;
   onRemoveMealItem: (id: string) => void;
   onChangeMealItemQuantity: (id: string, quantity: number) => void;
@@ -33,6 +34,7 @@ export function DietPlansPage({
   onAddMenu,
   onRemoveMenu,
   onRenameMenu,
+  onDuplicateMenu,
   onAddMealItem,
   onRemoveMealItem,
   onChangeMealItemQuantity,
@@ -60,6 +62,11 @@ export function DietPlansPage({
 
   const activeMenuItems = mealItems.filter((mi) => mi.menuId === activeMenuId);
 
+  function handleDuplicateMenu(menuId: string) {
+    const newMenuId = onDuplicateMenu(menuId);
+    if (newMenuId) setActiveMenuId(newMenuId);
+  }
+
   return (
     <div className="space-y-6">
       <WeeklyListGenerator patients={patients} menus={menus} mealItems={mealItems} onGenerate={onGenerateList} />
@@ -86,6 +93,7 @@ export function DietPlansPage({
                 onAdd={() => onAddMenu(activePatient.id)}
                 onRemove={onRemoveMenu}
                 onRename={onRenameMenu}
+                onDuplicate={handleDuplicateMenu}
               />
             </div>
 

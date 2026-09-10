@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pencil, Plus, X } from "lucide-react";
+import { Copy, Pencil, Plus, X } from "lucide-react";
 import type { Menu } from "../types";
 import { MAX_MENUS_PER_PATIENT } from "../data/meals";
 
@@ -10,9 +10,10 @@ interface MenuTabsProps {
   onAdd: () => void;
   onRemove: (id: string) => void;
   onRename: (id: string, name: string) => void;
+  onDuplicate: (id: string) => void;
 }
 
-export function MenuTabs({ menus, activeMenuId, onSelect, onAdd, onRemove, onRename }: MenuTabsProps) {
+export function MenuTabs({ menus, activeMenuId, onSelect, onAdd, onRemove, onRename, onDuplicate }: MenuTabsProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
 
@@ -56,6 +57,16 @@ export function MenuTabs({ menus, activeMenuId, onSelect, onAdd, onRemove, onRen
             >
               {menu.name}
             </button>
+            {menus.length < MAX_MENUS_PER_PATIENT && (
+              <button
+                type="button"
+                onClick={() => onDuplicate(menu.id)}
+                className="absolute -left-1.5 -top-1.5 hidden h-4 w-4 items-center justify-center rounded-full bg-slate-400 text-white hover:bg-blue-500 group-hover:flex"
+                aria-label={`Duplicar ${menu.name}`}
+              >
+                <Copy size={8} />
+              </button>
+            )}
             <button
               type="button"
               onClick={() => startEditing(menu)}

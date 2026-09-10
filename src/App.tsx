@@ -113,6 +113,7 @@ export default function App() {
               onAddMenu={dietPlans.addMenu}
               onRemoveMenu={dietPlans.removeMenu}
               onRenameMenu={dietPlans.renameMenu}
+              onDuplicateMenu={dietPlans.duplicateMenu}
               onAddMealItem={dietPlans.addMealItem}
               onRemoveMealItem={dietPlans.removeMealItem}
               onChangeMealItemQuantity={dietPlans.changeMealItemQuantity}
