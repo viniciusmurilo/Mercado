@@ -39,4 +39,19 @@ export interface MealItem {
 
 export type MealItemInput = Omit<MealItem, "id" | "menuId" | "meal">;
 
+/**
+ * Catálogo de alimentos reutilizável no cadastro dos planos alimentares.
+ * O fator de cocção pertence ao alimento (não a cada lançamento): ao
+ * adicionar um item de refeição, o catálogo é atualizado com o
+ * nome/unidade/categoria/fator usados, então o próximo lançamento do
+ * mesmo alimento já vem com esses valores por padrão.
+ */
+export interface Food {
+  id: string;
+  name: string;
+  unit: string;
+  category: string;
+  factor: number;
+}
+
 export type ShoppingItemInput = Omit<ShoppingItem, "id" | "checked" | "createdAt">;

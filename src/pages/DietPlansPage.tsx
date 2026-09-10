@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { MealId, MealItem, MealItemInput, Menu, Patient, ShoppingItemInput } from "../types";
+import type { Food, MealId, MealItem, MealItemInput, Menu, Patient, ShoppingItemInput } from "../types";
 import { MEALS } from "../data/meals";
 import { PatientTabs } from "../components/PatientTabs";
 import { MenuTabs } from "../components/MenuTabs";
@@ -11,6 +11,7 @@ interface DietPlansPageProps {
   patients: Patient[];
   menus: Menu[];
   mealItems: MealItem[];
+  foods: Food[];
   onAddPatient: (name: string) => void;
   onRemovePatient: (id: string) => void;
   onAddMenu: (patientId: string) => void;
@@ -26,6 +27,7 @@ export function DietPlansPage({
   patients,
   menus,
   mealItems,
+  foods,
   onAddPatient,
   onRemovePatient,
   onAddMenu,
@@ -95,6 +97,7 @@ export function DietPlansPage({
                       key={meal.id}
                       meal={meal}
                       items={activeMenuItems.filter((mi) => mi.meal === meal.id)}
+                      foods={foods}
                       onAdd={(input) => onAddMealItem(activeMenuId, meal.id, input)}
                       onRemove={onRemoveMealItem}
                       onChangeQuantity={onChangeMealItemQuantity}

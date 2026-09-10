@@ -107,6 +107,7 @@ export default function App() {
               patients={dietPlans.patients}
               menus={dietPlans.menus}
               mealItems={dietPlans.mealItems}
+              foods={dietPlans.foods}
               onAddPatient={dietPlans.addPatient}
               onRemovePatient={dietPlans.removePatient}
               onAddMenu={dietPlans.addMenu}

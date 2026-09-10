@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import type { FormEvent } from "react";
 import { Plus } from "lucide-react";
 import { CATEGORIES, UNITS } from "../data/categories";
 import { suggestCookingFactor } from "../data/cookingFactors";
-import type { MealItemInput, Preparation } from "../types";
+import type { Food, MealItemInput, Preparation } from "../types";
 
 interface MealItemFormProps {
+  foods: Food[];
   onAdd: (input: MealItemInput) => void;
 }
 
-export function MealItemForm({ onAdd }: MealItemFormProps) {
+export function MealItemForm({ foods, onAdd }: MealItemFormProps) {
+  const datalistId = useId();
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState("100");
   const [unit, setUnit] = useState("g");
@@ -19,9 +21,21 @@ export function MealItemForm({ onAdd }: MealItemFormProps) {
   const [factorTouched, setFactorTouched] = useState(false);
   const [error, setError] = useState("");
 
+  function findFood(value: string): Food | undefined {
+    const normalized = value.trim().toLowerCase();
+    if (!normalized) return undefined;
+    return foods.find((f) => f.name.trim().toLowerCase() === normalized);
+  }
+
   function handleNameChange(value: string) {
     setName(value);
-    if (preparation === "pronto" && !factorTouched) {
+    const match = findFood(value);
+    if (match) {
+      setUnit(match.unit);
+      setCategory(match.category);
+      if (preparation === "pronto") setFactor(String(match.factor));
+      setFactorTouched(false);
+    } else if (preparation === "pronto" && !factorTouched) {
       const suggestion = suggestCookingFactor(value);
       if (suggestion) setFactor(String(suggestion));
     }
@@ -29,7 +43,12 @@ export function MealItemForm({ onAdd }: MealItemFormProps) {
 
   function handlePreparationChange(value: Preparation) {
     setPreparation(value);
-    if (value === "pronto" && !factorTouched) {
+    if (value !== "pronto") return;
+    const match = findFood(name);
+    if (match) {
+      setFactor(String(match.factor));
+      setFactorTouched(false);
+    } else if (!factorTouched) {
       const suggestion = suggestCookingFactor(name);
       setFactor(suggestion ? String(suggestion) : "1");
     }
@@ -40,6 +59,7 @@ export function MealItemForm({ onAdd }: MealItemFormProps) {
     setFactorTouched(true);
   }
 
+  const matchedFood = findFood(name);
   const parsedQuantity = Number(quantity.replace(",", "."));
   const parsedFactor = Number(factor.replace(",", "."));
   const showPurchaseHint =
@@ -87,9 +107,15 @@ export function MealItemForm({ onAdd }: MealItemFormProps) {
         <input
           value={name}
           onChange={(e) => handleNameChange(e.target.value)}
+          list={datalistId}
           placeholder="Ex: Peito de frango"
           className="w-full rounded-md border border-slate-300 px-2.5 py-1.5 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
         />
+        <datalist id={datalistId}>
+          {foods.map((f) => (
+            <option key={f.id} value={f.name} />
+          ))}
+        </datalist>
       </div>
       <div className="w-20">
         <label className="mb-1 block text-[11px] font-medium text-slate-500">Qtd.</label>
@@ -172,6 +198,12 @@ export function MealItemForm({ onAdd }: MealItemFormProps) {
         <Plus size={14} /> Adicionar
       </button>
 
+      {matchedFood && (
+        <p className="w-full text-[11px] text-emerald-600">
+          ✓ alimento já cadastrado — unidade, categoria{preparation === "pronto" ? " e fator" : ""} preenchidos
+          automaticamente
+        </p>
+      )}
       {showPurchaseHint && (
         <p className="w-full text-[11px] text-slate-500">
           ≈ {purchaseHintValue} {unit} de {name || "alimento"} cru para comprar

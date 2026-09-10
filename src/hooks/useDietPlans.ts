@@ -2,7 +2,8 @@ import { useLocalStorage } from "./useLocalStorage";
 import { createId } from "../utils/id";
 import { DEFAULT_PATIENTS } from "../data/patients";
 import { MAX_MENUS_PER_PATIENT } from "../data/meals";
-import type { MealId, MealItem, MealItemInput, Menu, Patient } from "../types";
+import { DEFAULT_FOODS } from "../data/foods";
+import type { Food, MealId, MealItem, MealItemInput, Menu, Patient } from "../types";
 
 const DEFAULT_MENUS: Menu[] = DEFAULT_PATIENTS.map((p) => ({
   id: `${p.id}-menu-1`,
@@ -14,6 +15,33 @@ export function useDietPlans() {
   const [patients, setPatients] = useLocalStorage<Patient[]>("mercado.patients", DEFAULT_PATIENTS);
   const [menus, setMenus] = useLocalStorage<Menu[]>("mercado.menus", DEFAULT_MENUS);
   const [mealItems, setMealItems] = useLocalStorage<MealItem[]>("mercado.mealItems", []);
+  const [foods, setFoods] = useLocalStorage<Food[]>("mercado.foods", DEFAULT_FOODS);
+
+  /**
+   * Atualiza o catálogo de alimentos com o unidade/categoria usados e,
+   * quando informado, o fator de cocção — mantendo o fator já cadastrado
+   * quando o lançamento não define um (ex: item marcado como "cru").
+   */
+  function upsertFood(input: { name: string; unit: string; category: string; factor?: number }) {
+    const normalized = input.name.trim().toLowerCase();
+    setFoods((prev) => {
+      const existingIndex = prev.findIndex((f) => f.name.trim().toLowerCase() === normalized);
+      if (existingIndex >= 0) {
+        const next = [...prev];
+        next[existingIndex] = {
+          ...next[existingIndex],
+          unit: input.unit,
+          category: input.category,
+          ...(input.factor !== undefined ? { factor: input.factor } : {}),
+        };
+        return next;
+      }
+      return [
+        ...prev,
+        { id: createId(), name: input.name.trim(), unit: input.unit, category: input.category, factor: input.factor ?? 1 },
+      ];
+    });
+  }
 
   function addPatient(name: string) {
     const patientId = createId();
@@ -49,6 +77,12 @@ export function useDietPlans() {
 
   function addMealItem(menuId: string, meal: MealId, input: MealItemInput) {
     setMealItems((prev) => [...prev, { id: createId(), menuId, meal, ...input }]);
+    upsertFood({
+      name: input.name,
+      unit: input.unit,
+      category: input.category,
+      factor: input.preparation === "pronto" ? input.factor : undefined,
+    });
   }
 
   function removeMealItem(id: string) {
@@ -64,6 +98,7 @@ export function useDietPlans() {
     patients,
     menus,
     mealItems,
+    foods,
     addPatient,
     removePatient,
     addMenu,
