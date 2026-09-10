@@ -112,9 +112,11 @@ export function MealItemForm({ foods, onAdd }: MealItemFormProps) {
           className="w-full rounded-md border border-slate-300 px-2.5 py-1.5 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
         />
         <datalist id={datalistId}>
-          {foods.map((f) => (
-            <option key={f.id} value={f.name} />
-          ))}
+          {foods
+            .filter((f) => f.category === category)
+            .map((f) => (
+              <option key={f.id} value={f.name} />
+            ))}
         </datalist>
       </div>
       <div className="w-20">
