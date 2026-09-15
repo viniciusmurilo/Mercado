@@ -39,7 +39,7 @@ export function ShoppingListTable({
               type="checkbox"
               checked={item.checked}
               onChange={() => onToggle(item.id)}
-              className="h-4 w-4 shrink-0 rounded border-slate-300 text-emerald-500 focus:ring-emerald-500"
+              className="h-4 w-4 shrink-0 rounded border-slate-300 text-teal-500 focus:ring-teal-500"
             />
 
             <div className="min-w-0 flex-1">

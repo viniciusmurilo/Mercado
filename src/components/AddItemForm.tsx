@@ -51,7 +51,7 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Ex: Arroz"
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
           />
         </div>
 
@@ -62,7 +62,7 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
             inputMode="decimal"
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
           />
         </div>
 
@@ -71,7 +71,7 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
           <select
             value={unit}
             onChange={(e) => setUnit(e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
           >
             {UNITS.map((u) => (
               <option key={u} value={u}>
@@ -86,7 +86,7 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
           >
             {CATEGORIES.map((c) => (
               <option key={c.id} value={c.id}>
@@ -101,7 +101,7 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
 
       <button
         type="submit"
-        className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-600 sm:w-auto"
+        className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-pink-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-pink-600 sm:w-auto"
       >
         <Plus size={16} />
         Adicionar à lista

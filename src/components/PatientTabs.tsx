@@ -30,7 +30,7 @@ export function PatientTabs({ patients, activePatientId, onSelect, onAdd, onRemo
             onClick={() => onSelect(patient.id)}
             className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
               activePatientId === patient.id
-                ? "bg-emerald-500 text-white"
+                ? "bg-pink-500 text-white"
                 : "bg-slate-100 text-slate-700 hover:bg-slate-200"
             }`}
           >
@@ -58,14 +58,14 @@ export function PatientTabs({ patients, activePatientId, onSelect, onAdd, onRemo
             onKeyDown={(e) => e.key === "Enter" && submitAdd()}
             onBlur={submitAdd}
             placeholder="Nome do paciente"
-            className="rounded-lg border border-slate-300 px-2.5 py-1.5 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-lg border border-slate-300 px-2.5 py-1.5 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
           />
         </div>
       ) : (
         <button
           type="button"
           onClick={() => setAdding(true)}
-          className="flex items-center gap-1 rounded-lg border border-dashed border-slate-300 px-3 py-2 text-sm text-slate-500 hover:border-emerald-400 hover:text-emerald-600"
+          className="flex items-center gap-1 rounded-lg border border-dashed border-slate-300 px-3 py-2 text-sm text-slate-500 hover:border-pink-400 hover:text-pink-600"
         >
           <Plus size={14} /> Paciente
         </button>

@@ -124,7 +124,7 @@ export function WeeklyListGenerator({ patients, menus, mealItems, onGenerate }: 
                             type="checkbox"
                             checked={selected}
                             onChange={() => toggleMenu(patient.id, menu.id)}
-                            className="h-4 w-4 rounded border-slate-300 text-emerald-500 focus:ring-emerald-500"
+                            className="h-4 w-4 rounded border-slate-300 text-teal-500 focus:ring-teal-500"
                           />
                           {menu.name}
                         </label>
@@ -136,7 +136,7 @@ export function WeeklyListGenerator({ patients, menus, mealItems, onGenerate }: 
                               min="1"
                               value={patientSel[menu.id]}
                               onChange={(e) => setWeight(patient.id, menu.id, Math.max(1, Number(e.target.value) || 1))}
-                              className="w-12 rounded-md border border-slate-300 px-1.5 py-1 text-xs text-right outline-none focus:border-emerald-500"
+                              className="w-12 rounded-md border border-slate-300 px-1.5 py-1 text-xs text-right outline-none focus:border-pink-500"
                             />
                           </div>
                         )}
@@ -159,7 +159,7 @@ export function WeeklyListGenerator({ patients, menus, mealItems, onGenerate }: 
             <button
               type="button"
               onClick={() => setRerollSeed((s) => s + 1)}
-              className="flex items-center gap-1 text-xs font-medium text-emerald-600 hover:text-emerald-700"
+              className="flex items-center gap-1 text-xs font-medium text-pink-600 hover:text-pink-700"
             >
               <Shuffle size={12} /> Sortear novamente
             </button>
@@ -213,7 +213,7 @@ export function WeeklyListGenerator({ patients, menus, mealItems, onGenerate }: 
         type="button"
         disabled={aggregated.length === 0}
         onClick={handleGenerate}
-        className="mt-4 flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-4 flex items-center gap-2 rounded-lg bg-pink-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-pink-600 disabled:cursor-not-allowed disabled:opacity-50"
       >
         <ShoppingCart size={16} />
         Adicionar {aggregated.length > 0 ? `${aggregated.length} itens` : ""} à lista de compras

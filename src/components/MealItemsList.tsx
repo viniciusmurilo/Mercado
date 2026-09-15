@@ -66,7 +66,7 @@ function MealItemRow({
         onChange={(e) => setValue(e.target.value)}
         onBlur={commit}
         onKeyDown={(e) => e.key === "Enter" && (e.currentTarget as HTMLInputElement).blur()}
-        className="w-16 rounded-md border border-slate-300 px-1.5 py-1 text-right text-sm outline-none focus:border-emerald-500"
+        className="w-16 rounded-md border border-slate-300 px-1.5 py-1 text-right text-sm outline-none focus:border-pink-500"
       />
       <span className="w-8 text-xs text-slate-500">{item.unit}</span>
       <button

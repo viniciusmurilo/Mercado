@@ -31,7 +31,7 @@ export function Topbar({ onMenuClick, activeView }: TopbarProps) {
         </div>
       </div>
 
-      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-pink-100 text-pink-600">
         <ShoppingBasket size={18} />
       </div>
     </header>

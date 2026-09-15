@@ -30,7 +30,7 @@ export function Sidebar({ open, onClose, activeView, onNavigate }: SidebarProps)
         }`}
       >
         <div className="flex h-16 items-center gap-2 border-b border-slate-800 px-5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500 text-white">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-pink-500 text-white">
             <ShoppingCart size={20} />
           </span>
           <span className="text-lg font-semibold tracking-tight text-white">Mercado</span>
@@ -47,7 +47,7 @@ export function Sidebar({ open, onClose, activeView, onNavigate }: SidebarProps)
               }}
               className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors ${
                 activeView === id
-                  ? "bg-emerald-500/10 text-emerald-400"
+                  ? "bg-pink-500/10 text-pink-400"
                   : "text-slate-400 hover:bg-slate-800 hover:text-slate-100"
               }`}
             >

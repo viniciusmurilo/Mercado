@@ -41,9 +41,9 @@ export function DashboardPage({
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatCard label="Itens na lista" value={items.length} icon={PackageSearch} accent="#2563eb" />
+        <StatCard label="Itens na lista" value={items.length} icon={PackageSearch} accent="#db2777" />
         <StatCard label="Faltando comprar" value={stats.pending.length} icon={ListTodo} accent="#d97706" />
-        <StatCard label="No carrinho" value={stats.checked.length} icon={CheckCircle2} accent="#16a34a" />
+        <StatCard label="No carrinho" value={stats.checked.length} icon={CheckCircle2} accent="#0d9488" />
         <StatCard label="Progresso" value={`${stats.progress}%`} icon={Percent} accent="#7c3aed" />
       </div>
 

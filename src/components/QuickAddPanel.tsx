@@ -46,7 +46,7 @@ export function QuickAddPanel({ items, onQuickAdd }: QuickAddPanelProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar item..."
-            className="w-full rounded-lg border border-slate-300 py-2 pl-9 pr-3 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="w-full rounded-lg border border-slate-300 py-2 pl-9 pr-3 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
           />
         </div>
       </div>
@@ -85,8 +85,8 @@ export function QuickAddPanel({ items, onQuickAdd }: QuickAddPanelProps) {
                 onClick={() => onQuickAdd({ name: item.name, quantity: 1, unit: item.unit, category: item.category })}
                 className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                   inList
-                    ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                    : "border-slate-200 bg-white text-slate-700 hover:border-emerald-300 hover:bg-emerald-50/50"
+                    ? "border-pink-200 bg-pink-50 text-pink-700"
+                    : "border-slate-200 bg-white text-slate-700 hover:border-pink-300 hover:bg-pink-50/50"
                 }`}
               >
                 {inList ? <Check size={13} /> : <Plus size={13} />}

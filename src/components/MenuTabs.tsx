@@ -41,7 +41,7 @@ export function MenuTabs({ menus, activeMenuId, onSelect, onAdd, onRemove, onRen
               if (e.key === "Enter") commitEdit();
               if (e.key === "Escape") setEditingId(null);
             }}
-            className="rounded-full border border-slate-300 px-3.5 py-1.5 text-xs font-medium outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="rounded-full border border-slate-300 px-3.5 py-1.5 text-xs font-medium outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
           />
         ) : (
           <div key={menu.id} className="group relative">
@@ -92,7 +92,7 @@ export function MenuTabs({ menus, activeMenuId, onSelect, onAdd, onRemove, onRen
         <button
           type="button"
           onClick={onAdd}
-          className="flex items-center gap-1 rounded-full border border-dashed border-slate-300 px-3 py-1.5 text-xs text-slate-500 hover:border-emerald-400 hover:text-emerald-600"
+          className="flex items-center gap-1 rounded-full border border-dashed border-slate-300 px-3 py-1.5 text-xs text-slate-500 hover:border-pink-400 hover:text-pink-600"
         >
           <Plus size={12} /> Cardápio
         </button>

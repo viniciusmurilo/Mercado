@@ -109,7 +109,7 @@ export function MealItemForm({ foods, onAdd }: MealItemFormProps) {
           onChange={(e) => handleNameChange(e.target.value)}
           list={datalistId}
           placeholder="Ex: Peito de frango"
-          className="w-full rounded-md border border-slate-300 px-2.5 py-1.5 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+          className="w-full rounded-md border border-slate-300 px-2.5 py-1.5 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
         />
         <datalist id={datalistId}>
           {foods
@@ -125,7 +125,7 @@ export function MealItemForm({ foods, onAdd }: MealItemFormProps) {
           value={quantity}
           onChange={(e) => setQuantity(e.target.value)}
           inputMode="decimal"
-          className="w-full rounded-md border border-slate-300 px-2.5 py-1.5 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+          className="w-full rounded-md border border-slate-300 px-2.5 py-1.5 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
         />
       </div>
       <div className="w-20">
@@ -133,7 +133,7 @@ export function MealItemForm({ foods, onAdd }: MealItemFormProps) {
         <select
           value={unit}
           onChange={(e) => setUnit(e.target.value)}
-          className="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+          className="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
         >
           {UNITS.map((u) => (
             <option key={u} value={u}>
@@ -147,7 +147,7 @@ export function MealItemForm({ foods, onAdd }: MealItemFormProps) {
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+          className="w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
         >
           {CATEGORIES.map((c) => (
             <option key={c.id} value={c.id}>
@@ -164,7 +164,7 @@ export function MealItemForm({ foods, onAdd }: MealItemFormProps) {
             type="button"
             onClick={() => handlePreparationChange("cru")}
             className={`rounded px-2 py-1 font-medium transition-colors ${
-              preparation === "cru" ? "bg-emerald-500 text-white" : "text-slate-500"
+              preparation === "cru" ? "bg-pink-500 text-white" : "text-slate-500"
             }`}
           >
             Cru
@@ -173,7 +173,7 @@ export function MealItemForm({ foods, onAdd }: MealItemFormProps) {
             type="button"
             onClick={() => handlePreparationChange("pronto")}
             className={`rounded px-2 py-1 font-medium transition-colors ${
-              preparation === "pronto" ? "bg-emerald-500 text-white" : "text-slate-500"
+              preparation === "pronto" ? "bg-pink-500 text-white" : "text-slate-500"
             }`}
           >
             Pronto
@@ -188,20 +188,20 @@ export function MealItemForm({ foods, onAdd }: MealItemFormProps) {
             value={factor}
             onChange={(e) => handleFactorChange(e.target.value)}
             inputMode="decimal"
-            className="w-full rounded-md border border-slate-300 px-2.5 py-1.5 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+            className="w-full rounded-md border border-slate-300 px-2.5 py-1.5 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
           />
         </div>
       )}
 
       <button
         type="submit"
-        className="flex items-center gap-1 rounded-md bg-emerald-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-600"
+        className="flex items-center gap-1 rounded-md bg-pink-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-pink-600"
       >
         <Plus size={14} /> Adicionar
       </button>
 
       {matchedFood && (
-        <p className="w-full text-[11px] text-emerald-600">
+        <p className="w-full text-[11px] text-pink-600">
           ✓ alimento já cadastrado — unidade, categoria{preparation === "pronto" ? " e fator" : ""} preenchidos
           automaticamente
         </p>
